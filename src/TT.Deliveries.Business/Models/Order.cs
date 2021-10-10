@@ -1,14 +1,15 @@
-namespace TT.Deliveries.Data.Models
+namespace TT.Deliveries.Business.Models
 {
     public class Order
     {
         public Order(string orderNumber, string sender)
         {
-            this.OrderNumber = orderNumber;
-            this.Sender = sender;
+            OrderNumber = orderNumber;
+            Sender = sender;
         }
 
         public string OrderNumber { get; set; }
+
         public string Sender { get; set; }
     }
 }

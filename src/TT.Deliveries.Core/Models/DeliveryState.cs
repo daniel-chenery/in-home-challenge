@@ -1,4 +1,4 @@
-namespace TT.Deliveries.Data.Dto
+namespace TT.Deliveries.Core.Models
 {
     public enum DeliveryState
     {
