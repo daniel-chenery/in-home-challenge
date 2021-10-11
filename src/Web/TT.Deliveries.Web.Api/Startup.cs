@@ -1,22 +1,22 @@
+using Dapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System;
+using System.Linq;
+using System.Text.Json.Serialization;
+using TT.Deliveries.Business;
+using TT.Deliveries.Business.Providers;
 using TT.Deliveries.Business.Services;
 using TT.Deliveries.Core.Configuration;
-using TT.Deliveries.Data.Repositories;
-using TT.Deliveries.Business.Providers;
 using TT.Deliveries.Data;
-using TT.Deliveries.Business;
-using System.Linq;
-using System.Collections.Generic;
-using System;
-using Dapper;
+using TT.Deliveries.Data.Repositories;
 
 namespace TT.Deliveries.Web.Api
 {
@@ -37,12 +37,16 @@ namespace TT.Deliveries.Web.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers()
+                .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
             services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TT.Deliveries.Web.Api", Version = "v1" });
                 c.ResolveConflictingActions(api => api.First());
+                c.DescribeAllParametersInCamelCase();
 
                 var jwtScheme = new OpenApiSecurityScheme()
                 {
@@ -137,6 +141,7 @@ namespace TT.Deliveries.Web.Api
         /// <summary>
         /// Instantiates the in-memory database
         /// It should be done via external scripts and not part of start-up
+        /// True Foreign keys are not setup
         /// </summary>
         /// <param name="connectionProvider"></param>
         public void ConfigureDatabase(IConnectionProvider connectionProvider)

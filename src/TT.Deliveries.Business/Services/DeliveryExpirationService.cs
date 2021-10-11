@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TT.Deliveries.Core;
@@ -32,6 +30,7 @@ namespace TT.Deliveries.Business.Services
             _logger.LogInformation("Starting Delivery Expiration Service.");
 
             // This should be generated from a factory for UnitTesting ease
+            // The 30 minutes should also be configured from an appSetting value
             _timer = new Timer(async (_) => await CheckAsync(), null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
 
             return Task.CompletedTask;

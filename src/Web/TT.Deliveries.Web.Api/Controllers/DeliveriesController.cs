@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using TT.Deliveries.Business.Models;
 using TT.Deliveries.Business.Services;
-using TT.Deliveries.Core.Models;
 using TT.Deliveries.Web.Api.Models;
 
 namespace TT.Deliveries.Web.Api.Controllers
@@ -68,7 +65,7 @@ namespace TT.Deliveries.Web.Api.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult<ApiResponse<Delivery>>> Update(UpdateDelivery updateDelivery)
         {
             try

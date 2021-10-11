@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using TT.Deliveries.Core.Configuration;
 using TT.Deliveries.Business.Providers;
 using TT.Deliveries.Core;
+using TT.Deliveries.Core.Configuration;
 using TT.Deliveries.Core.Models;
 
 namespace TT.Deliveries.Business.Services

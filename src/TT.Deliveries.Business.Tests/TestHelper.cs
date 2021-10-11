@@ -19,10 +19,21 @@ namespace TT.Deliveries.Business.Tests
                 .Setup(l => l.Log(
                     It.IsAny<LogLevel>(),
                     It.IsAny<EventId>(),
-                    It.IsAny<object>(),
+                    It.IsAny<It.IsAnyType>(),
                     It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>()))
-                .Callback<LogLevel, EventId, object, Exception, Func<object, Exception, string>>((l, e, t, ex, fn) => Console.WriteLine(fn(t, ex)));
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()))
+                // https://github.com/moq/moq4/issues/918
+                .Callback(new InvocationAction(inv =>
+                {
+                    var fn = inv.Arguments[4]
+                        .GetType()
+                        .GetMethod("Invoke");
+
+                    var msg = fn?.Invoke(inv.Arguments[4], new[] { inv.Arguments[2], inv.Arguments[3] });
+
+                    Console.WriteLine($"{inv.Arguments[0]} - {msg}");
+                }));
+            //.Callback<LogLevel, EventId, object, Exception, Func<object, Exception, string>>((l, e, t, ex, fn) => Console.WriteLine(fn(t, ex)));
 
             return mock;
         }

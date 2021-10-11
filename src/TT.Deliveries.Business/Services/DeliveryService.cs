@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TT.Deliveries.Business.Models;
 using TT.Deliveries.Core;
@@ -201,13 +200,13 @@ namespace TT.Deliveries.Business.Services
         {
             // As per other methods, this is bad and should be refactored to use predicates & joins
 
-            var deliveries = await _deliveryRepository.GetAllAsync();
+            var deliveries = (await _deliveryRepository.GetAllAsync()).Where(d => d.State != DeliveryState.Expired);
             var expiredAccessWindows = (await _accessWindowRepository.GetAllAsync())
                 .Where(aw => aw.EndTime <= expiration);
 
             var expiredDeliveries = deliveries.Where(d => expiredAccessWindows.Any(aw => aw.DeliveryId == d.Id));
 
-            return _mapper.Map<IEnumerable<Data.Models.Delivery>, IEnumerable<Delivery>>(deliveries);
+            return _mapper.Map<IEnumerable<Data.Models.Delivery>, IEnumerable<Delivery>>(expiredDeliveries);
         }
 
         public async Task UpdateAsync(UpdateDelivery updateDelivery)

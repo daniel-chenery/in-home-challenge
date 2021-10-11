@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -30,6 +29,7 @@ namespace TT.Deliveries.Data.Repositories
             => Query(async con => (await con.GetAllAsync<TModel>()).Single(m => m.Id!.Equals(id)));
 
         // This method is *extremely* ineffecient.  A proper repository layer (such as EF) would use a predicate.
+        // An expression is used over a func should we want to break it down to build SQL queries at a later date.
         public Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression)
             => Query(async con => (await con.GetAllAsync<TModel>()).Single(expression.Compile()));
 
